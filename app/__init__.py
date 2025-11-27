@@ -44,13 +44,12 @@ def create_app(config_class=Config):
     # Ruta raíz
     @app.route('/')
     def index():
+        from flask import redirect, url_for
         from flask_login import current_user
         if current_user.is_authenticated:
             if current_user.es_admin():
-                from flask import redirect, url_for
                 return redirect(url_for('admin.dashboard'))
             return redirect(url_for('profesor.dashboard'))
-        from flask import redirect, url_for
         return redirect(url_for('auth.login'))
     
     return app

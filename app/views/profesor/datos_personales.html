@@ -7,6 +7,7 @@
 <hr>
 
 <form method="POST" action="{{ url_for('profesor.datos_personales') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="{{ current_user.nombre }}" required>
@@ -32,7 +33,9 @@
     <div class="mb-3">
         <label for="orcid_id" class="form-label">ORCID ID</label>
         <input type="text" class="form-control" id="orcid_id" name="orcid_id" 
-               value="{{ current_user.orcid_id or '' }}">
+               value="{{ current_user.orcid_id or '' }}" 
+               placeholder="0000-0000-0000-0000">
+        <small class="form-text text-muted">Formato: 0000-0000-0000-0000. Encuéntralo en <a href="https://orcid.org" target="_blank">orcid.org</a></small>
     </div>
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 </form>

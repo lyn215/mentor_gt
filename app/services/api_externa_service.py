@@ -53,8 +53,8 @@ class APIExternaService:
             return []
     
     def obtener_publicaciones_orcid(self, orcid_id: str) -> List[Dict]:
-        """Obtiene publicaciones de ORCID"""
-        if not self.orcid_client_id or not orcid_id:
+        """Obtiene publicaciones de ORCID (API pública, no requiere autenticación)"""
+        if not orcid_id:
             return []
         
         try:
@@ -63,12 +63,14 @@ class APIExternaService:
                 'Accept': 'application/json'
             }
             
-            response = requests.get(url, headers=headers, timeout=10)
+            response = requests.get(url, headers=headers, timeout=30)
             if response.status_code == 200:
                 data = response.json()
                 return self._procesar_respuesta_orcid(data)
+            elif response.status_code == 404:
+                raise ValueError(f"ORCID no encontrado: {orcid_id}")
             return []
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
             print(f"Error obteniendo publicaciones de ORCID: {e}")
             return []
     
@@ -106,16 +108,61 @@ class APIExternaService:
         """Procesa la respuesta de ORCID"""
         publicaciones = []
         works = data.get('group', [])
+        
         for work in works:
-            work_summary = work.get('work-summary', [{}])[0]
+            work_summaries = work.get('work-summary', [])
+            if not work_summaries:
+                continue
+                
+            work_summary = work_summaries[0]
             titulo = work_summary.get('title', {}).get('title', {}).get('value', '')
-            if titulo:
-                publicaciones.append({
-                    'titulo': titulo,
-                    'doi': work_summary.get('external-ids', {}).get('external-id', [{}])[0].get('external-id-value', ''),
-                    'año': work_summary.get('publication-date', {}).get('year', {}).get('value', ''),
-                    'tipo': 'articulo'
-                })
+            
+            if not titulo:
+                continue
+            
+            # Extraer DOI
+            doi = ''
+            external_ids = work_summary.get('external-ids', {}).get('external-id', [])
+            for ext_id in external_ids:
+                if ext_id.get('external-id-type') == 'doi':
+                    doi = ext_id.get('external-id-value', '')
+                    break
+            
+            # Extraer año
+            año = None
+            pub_date = work_summary.get('publication-date')
+            if pub_date and pub_date.get('year'):
+                try:
+                    año = int(pub_date['year']['value'])
+                except (ValueError, TypeError):
+                    año = None
+            
+            # Extraer revista
+            revista = ''
+            journal_title = work_summary.get('journal-title')
+            if journal_title:
+                revista = journal_title.get('value', '')
+            
+            # Extraer tipo de publicación
+            tipo_orcid = work_summary.get('type', '')
+            tipo_map = {
+                'journal-article': 'articulo',
+                'book': 'libro',
+                'book-chapter': 'capitulo',
+                'conference-paper': 'conferencia',
+                'dissertation': 'tesis',
+                'report': 'reporte'
+            }
+            tipo = tipo_map.get(tipo_orcid, 'articulo')
+            
+            publicaciones.append({
+                'titulo': titulo,
+                'doi': doi,
+                'año': año,
+                'tipo': tipo,
+                'revista': revista
+            })
+        
         return publicaciones
     
     def _obtener_detalles_pubmed(self, pmids: List[str]) -> List[Dict]:

@@ -86,7 +86,7 @@ class SyncService:
         """Sincroniza publicaciones de ORCID"""
         usuario = Usuario.query.get(usuario_id)
         if not usuario or not usuario.orcid_id:
-            raise ValueError("Usuario no tiene ORCID ID configurado")
+            raise ValueError("Usuario no tiene ORCID ID configurado. Ve a 'Datos Personales' para agregarlo.")
         
         publicaciones_api = self.api_service.obtener_publicaciones_orcid(usuario.orcid_id)
         publicaciones_agregadas = 0
@@ -104,6 +104,7 @@ class SyncService:
                 publicacion = Publicacion(
                     usuario_id=usuario_id,
                     titulo=pub_data.get('titulo', ''),
+                    revista=pub_data.get('revista', ''),
                     año=pub_data.get('año'),
                     doi=pub_data.get('doi', ''),
                     tipo=pub_data.get('tipo', 'articulo')
