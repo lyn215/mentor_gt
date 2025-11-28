@@ -1,0 +1,51 @@
+{% extends "layouts/docente_layout.html" %}
+
+{% block docente_title %}Empleos{% endblock %}
+
+{% block docente_content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Empleos</h2>
+        <a href="{{ url_for('docente.nuevo_empleo') }}" class="btn btn-primary">Nuevo Empleo</a>
+    </div>
+    
+    {% if empleos %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Institución</th>
+                    <th>Puesto</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Actual</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empleo in empleos %}
+                <tr>
+                    <td>{{ empleo.institucion }}</td>
+                    <td>{{ empleo.puesto }}</td>
+                    <td>{{ empleo.fecha_inicio or '-' }}</td>
+                    <td>{{ empleo.fecha_fin or '-' }}</td>
+                    <td>{% if empleo.actual %}Sí{% else %}No{% endif %}</td>
+                    <td>
+                        <a href="{{ url_for('docente.editar_empleo', id=empleo.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="POST" action="{{ url_for('docente.eliminar_empleo', id=empleo.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No hay empleos registrados. <a href="{{ url_for('docente.nuevo_empleo') }}">Agregar uno</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

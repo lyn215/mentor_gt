@@ -13,7 +13,6 @@
                 <h5 class="card-title">Google Scholar</h5>
                 <p class="card-text">Sincroniza tus publicaciones desde Google Scholar.</p>
                 <form method="POST" action="{{ url_for('sync.sync_google_scholar') }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-primary">Sincronizar</button>
                 </form>
             </div>
@@ -25,7 +24,6 @@
                 <h5 class="card-title">Scopus</h5>
                 <p class="card-text">Sincroniza tus publicaciones desde Scopus.</p>
                 <form method="POST" action="{{ url_for('sync.sync_scopus') }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-primary">Sincronizar</button>
                 </form>
             </div>
@@ -37,7 +35,6 @@
                 <h5 class="card-title">ORCID</h5>
                 <p class="card-text">Sincroniza tus publicaciones desde ORCID.</p>
                 <form method="POST" action="{{ url_for('sync.sync_orcid') }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-primary">Sincronizar</button>
                 </form>
             </div>
@@ -49,7 +46,6 @@
                 <h5 class="card-title">PubMed</h5>
                 <p class="card-text">Sincroniza tus publicaciones desde PubMed.</p>
                 <form method="POST" action="{{ url_for('sync.sync_pubmed') }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-primary">Sincronizar</button>
                 </form>
             </div>

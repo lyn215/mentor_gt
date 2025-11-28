@@ -1,0 +1,46 @@
+{% extends "layouts/admin_layout.html" %}
+
+{% block admin_title %}Docentes{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid">
+    <h2>Lista de Docentes</h2>
+    <hr>
+    
+    {% if docentes %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Completo</th>
+                    <th>CVU</th>
+                    <th>Email</th>
+                    <th>ORCID</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for docente in docentes %}
+                <tr>
+                    <td>{{ docente.id }}</td>
+                    <td>{{ docente.nombre_completo }}</td>
+                    <td>{{ docente.cvu or '-' }}</td>
+                    <td>{{ docente.user.email if docente.user else '-' }}</td>
+                    <td>{{ docente.orcid or '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.ver_docente', id=docente.id) }}" class="btn btn-sm btn-primary">Ver Perfil</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No hay docentes registrados.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

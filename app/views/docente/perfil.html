@@ -1,0 +1,110 @@
+{% extends "layouts/docente_layout.html" %}
+
+{% block docente_title %}Mi Perfil{% endblock %}
+
+{% block docente_content %}
+<div class="container-fluid">
+    <h2>Mi Perfil</h2>
+    
+    <form method="POST" action="{{ url_for('docente.perfil') }}">
+        {{ form.hidden_tag() }}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.cvu.label(class="form-label") }}
+                    {{ form.cvu(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.nombre_completo.label(class="form-label") }}
+                    {{ form.nombre_completo(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.curp.label(class="form-label") }}
+                    {{ form.curp(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.rfc.label(class="form-label") }}
+                    {{ form.rfc(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.sexo.label(class="form-label") }}
+                    {{ form.sexo(class="form-select") }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.fecha_nacimiento.label(class="form-label") }}
+                    {{ form.fecha_nacimiento(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.estado_civil.label(class="form-label") }}
+                    {{ form.estado_civil(class="form-select") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.pais_nacimiento.label(class="form-label") }}
+                    {{ form.pais_nacimiento(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.nacionalidad.label(class="form-label") }}
+                    {{ form.nacionalidad(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.domicilio.label(class="form-label") }}
+            {{ form.domicilio(class="form-control", rows="3") }}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.correo_principal.label(class="form-label") }}
+                    {{ form.correo_principal(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.orcid.label(class="form-label") }}
+                    {{ form.orcid(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.researcher_id.label(class="form-label") }}
+            {{ form.researcher_id(class="form-control") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('docente.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

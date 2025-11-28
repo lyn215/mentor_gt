@@ -1,0 +1,51 @@
+{% extends "layouts/docente_layout.html" %}
+
+{% block docente_title %}Artículos{% endblock %}
+
+{% block docente_content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Artículos Científicos</h2>
+        <a href="{{ url_for('docente.nuevo_articulo') }}" class="btn btn-primary">Nuevo Artículo</a>
+    </div>
+    
+    {% if articulos %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Revista</th>
+                    <th>Año</th>
+                    <th>DOI</th>
+                    <th>Destacado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for articulo in articulos %}
+                <tr>
+                    <td>{{ articulo.titulo[:50] }}{% if articulo.titulo|length > 50 %}...{% endif %}</td>
+                    <td>{{ articulo.revista or '-' }}</td>
+                    <td>{{ articulo.anio or '-' }}</td>
+                    <td>{{ articulo.doi or '-' }}</td>
+                    <td>{% if articulo.producto_destacado %}Sí{% else %}No{% endif %}</td>
+                    <td>
+                        <a href="{{ url_for('docente.editar_articulo', id=articulo.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="POST" action="{{ url_for('docente.eliminar_articulo', id=articulo.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No hay artículos registrados. <a href="{{ url_for('docente.nuevo_articulo') }}">Agregar uno</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

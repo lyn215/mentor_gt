@@ -1,0 +1,94 @@
+{% extends "layouts/docente_layout.html" %}
+
+{% block docente_title %}Nueva Formación Académica{% endblock %}
+
+{% block docente_content %}
+<div class="container-fluid">
+    <h2>Nueva Formación Académica</h2>
+    
+    <form method="POST" action="{{ url_for('docente.nueva_formacion') }}">
+        {{ form.hidden_tag() }}
+        
+        <div class="mb-3">
+            {{ form.nivel.label(class="form-label") }}
+            {{ form.nivel(class="form-select") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.grado_obtenido.label(class="form-label") }}
+            {{ form.grado_obtenido(class="form-control") }}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.institucion.label(class="form-label") }}
+                    {{ form.institucion(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.pais.label(class="form-label") }}
+                    {{ form.pais(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.fecha_inicio.label(class="form-label") }}
+                    {{ form.fecha_inicio(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.fecha_fin.label(class="form-label") }}
+                    {{ form.fecha_fin(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.titulo_trabajo.label(class="form-label") }}
+            {{ form.titulo_trabajo(class="form-control", rows="3") }}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.area_conocimiento.label(class="form-label") }}
+                    {{ form.area_conocimiento(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.campo.label(class="form-label") }}
+                    {{ form.campo(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.disciplina.label(class="form-label") }}
+                    {{ form.disciplina(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.subdisciplina.label(class="form-label") }}
+                    {{ form.subdisciplina(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('docente.formacion') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

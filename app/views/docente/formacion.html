@@ -1,0 +1,49 @@
+{% extends "layouts/docente_layout.html" %}
+
+{% block docente_title %}Formación Académica{% endblock %}
+
+{% block docente_content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Formación Académica</h2>
+        <a href="{{ url_for('docente.nueva_formacion') }}" class="btn btn-primary">Nueva Formación</a>
+    </div>
+    
+    {% if formaciones %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nivel</th>
+                    <th>Grado Obtenido</th>
+                    <th>Institución</th>
+                    <th>Fecha Fin</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for formacion in formaciones %}
+                <tr>
+                    <td>{{ formacion.nivel }}</td>
+                    <td>{{ formacion.grado_obtenido or '-' }}</td>
+                    <td>{{ formacion.institucion or '-' }}</td>
+                    <td>{{ formacion.fecha_fin or '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('docente.editar_formacion', id=formacion.id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="POST" action="{{ url_for('docente.eliminar_formacion', id=formacion.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        No hay formación académica registrada. <a href="{{ url_for('docente.nueva_formacion') }}">Agregar una</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

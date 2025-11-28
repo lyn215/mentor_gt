@@ -1,0 +1,71 @@
+{% extends "layouts/docente_layout.html" %}
+
+{% block docente_title %}Editar Empleo{% endblock %}
+
+{% block docente_content %}
+<div class="container-fluid">
+    <h2>Editar Empleo</h2>
+    
+    <form method="POST" action="{{ url_for('docente.editar_empleo', id=empleo.id) }}">
+        {{ form.hidden_tag() }}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.institucion.label(class="form-label") }}
+                    {{ form.institucion(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.puesto.label(class="form-label") }}
+                    {{ form.puesto(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.tipo_contrato.label(class="form-label") }}
+            {{ form.tipo_contrato(class="form-select") }}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.fecha_inicio.label(class="form-label") }}
+                    {{ form.fecha_inicio(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.fecha_fin.label(class="form-label") }}
+                    {{ form.fecha_fin(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <div class="form-check">
+                {{ form.actual(class="form-check-input") }}
+                {{ form.actual.label(class="form-check-label") }}
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.logros.label(class="form-label") }}
+            {{ form.logros(class="form-control", rows="3") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.area_adscripcion.label(class="form-label") }}
+            {{ form.area_adscripcion(class="form-control") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('docente.empleos') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

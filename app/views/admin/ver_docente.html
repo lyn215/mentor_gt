@@ -1,0 +1,93 @@
+{% extends "layouts/admin_layout.html" %}
+
+{% block admin_title %}Perfil de {{ docente.nombre_completo }}{% endblock %}
+
+{% block admin_content %}
+<div class="container-fluid">
+    <h2>Perfil de {{ docente.nombre_completo }}</h2>
+    <hr>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Información Personal</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>CVU:</strong> {{ docente.cvu or '-' }}</p>
+                    <p><strong>CURP:</strong> {{ docente.curp or '-' }}</p>
+                    <p><strong>RFC:</strong> {{ docente.rfc or '-' }}</p>
+                    <p><strong>Email:</strong> {{ docente.user.email if docente.user else '-' }}</p>
+                    <p><strong>ORCID:</strong> {{ docente.orcid or '-' }}</p>
+                    <p><strong>Researcher ID:</strong> {{ docente.researcher_id or '-' }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Estadísticas</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Formaciones:</strong> {{ formaciones|length }}</p>
+                    <p><strong>Empleos:</strong> {{ empleos|length }}</p>
+                    <p><strong>Artículos:</strong> {{ articulos|length }}</p>
+                    <p><strong>Libros:</strong> {{ libros|length }}</p>
+                    <p><strong>Congresos:</strong> {{ congresos|length }}</p>
+                    <p><strong>Tesis Dirigidas:</strong> {{ tesis|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4>Formación Académica</h4>
+            {% if formaciones %}
+            <ul>
+                {% for formacion in formaciones %}
+                <li>{{ formacion.nivel }} - {{ formacion.grado_obtenido or formacion.institucion }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No hay formación académica registrada.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4>Empleos</h4>
+            {% if empleos %}
+            <ul>
+                {% for empleo in empleos %}
+                <li>{{ empleo.puesto }} en {{ empleo.institucion }} {% if empleo.actual %}(Actual){% endif %}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No hay empleos registrados.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4>Artículos Científicos</h4>
+            {% if articulos %}
+            <ul>
+                {% for articulo in articulos %}
+                <li>{{ articulo.titulo }} ({{ articulo.anio or 'Sin año' }})</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No hay artículos registrados.</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('admin.docentes') }}" class="btn btn-secondary">Volver a Lista</a>
+    </div>
+</div>
+{% endblock %}
+

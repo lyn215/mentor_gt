@@ -1,39 +1,45 @@
 from app import create_app, db
-from app.models.usuario import Usuario
+from app.models.user import User
 
 app = create_app()
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'Usuario': Usuario}
+    return {'db': db, 'User': User}
 
 if __name__ == '__main__':
     with app.app_context():
+        # Habilitar foreign keys en SQLite
+        if 'sqlite' in app.config['SQLALCHEMY_DATABASE_URI']:
+            with db.engine.connect() as conn:
+                conn.execute(db.text('PRAGMA foreign_keys = ON'))
+                conn.commit()
+        
+        # Crear todas las tablas
         db.create_all()
+        
         # Crear usuario administrador por defecto
-        if not Usuario.query.filter_by(email='admin@academic.com').first():
-            admin = Usuario(
-                email='admin@academic.com',
-                nombre='Administrador',
-                apellidos='Sistema',
-                rol='admin'
+        if not User.query.filter_by(email='admin@utte.edu.mx').first():
+            admin = User(
+                email='admin@utte.edu.mx',
+                role='admin'
             )
             admin.set_password('admin123')
             db.session.add(admin)
+            db.session.commit()
+            print("✅ Usuario administrador creado: admin@utte.edu.mx / admin123")
         
-        # Crear usuario profesor por defecto
-        if not Usuario.query.filter_by(email='profesor@academic.com').first():
-            profesor = Usuario(
-                email='profesor@academic.com',
-                nombre='Profesor',
-                apellidos='Ejemplo',
-                rol='profesor'
+        # Crear usuario docente por defecto
+        if not User.query.filter_by(email='docente@utte.edu.mx').first():
+            docente_user = User(
+                email='docente@utte.edu.mx',
+                role='docente'
             )
-            profesor.set_password('profesor123')
-            db.session.add(profesor)
+            docente_user.set_password('docente123')
+            db.session.add(docente_user)
+            db.session.commit()
+            print("✅ Usuario docente creado: docente@utte.edu.mx / docente123")
         
-        db.session.commit()
-        print("✅ Base de datos inicializada")
-        print("✅ Usuarios por defecto creados")
+        print("✅ Base de datos inicializada correctamente")
+    
     app.run(debug=True, host='0.0.0.0', port=5000)
-

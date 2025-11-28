@@ -7,7 +7,6 @@
 <hr>
 
 <form method="POST" action="{{ url_for('profesor.datos_personales') }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="{{ current_user.nombre }}" required>

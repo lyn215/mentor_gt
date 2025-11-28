@@ -1,0 +1,117 @@
+{% extends "layouts/docente_layout.html" %}
+
+{% block docente_title %}Editar Artículo{% endblock %}
+
+{% block docente_content %}
+<div class="container-fluid">
+    <h2>Editar Artículo Científico</h2>
+    
+    <form method="POST" action="{{ url_for('docente.editar_articulo', id=articulo.id) }}">
+        {{ form.hidden_tag() }}
+        
+        <div class="mb-3">
+            {{ form.titulo.label(class="form-label") }}
+            {{ form.titulo(class="form-control") }}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.revista.label(class="form-label") }}
+                    {{ form.revista(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.anio.label(class="form-label") }}
+                    {{ form.anio(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.volumen.label(class="form-label") }}
+                    {{ form.volumen(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.numero.label(class="form-label") }}
+                    {{ form.numero(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    {{ form.paginas.label(class="form-label") }}
+                    {{ form.paginas(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.rol_participacion.label(class="form-label") }}
+                    {{ form.rol_participacion(class="form-select") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.estado.label(class="form-label") }}
+                    {{ form.estado(class="form-select") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.issn_impreso.label(class="form-label") }}
+                    {{ form.issn_impreso(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.issn_electronico.label(class="form-label") }}
+                    {{ form.issn_electronico(class="form-control") }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.doi.label(class="form-label") }}
+            {{ form.doi(class="form-control") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.indexacion.label(class="form-label") }}
+            {{ form.indexacion(class="form-control") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.autores.label(class="form-label") }}
+            {{ form.autores(class="form-control", rows="3") }}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.objetivo.label(class="form-label") }}
+            {{ form.objetivo(class="form-control", rows="3") }}
+        </div>
+        
+        <div class="mb-3">
+            <div class="form-check">
+                {{ form.producto_destacado(class="form-check-input") }}
+                {{ form.producto_destacado.label(class="form-check-label") }}
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('docente.articulos') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
