@@ -1,140 +1,916 @@
 {% extends "layouts/docente_layout.html" %}
 
+{% block page_title %}Editar Mi Información{% endblock %}
 {% block docente_title %}Mi Perfil{% endblock %}
 
+{% block extra_css %}
+<style>
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .profile-avatar {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+        font-weight: 600;
+    }
+    
+    .profile-info h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #1a1a2e;
+    }
+    
+    .profile-info p {
+        margin: 5px 0 0;
+        color: #666;
+    }
+    
+    .profile-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        border-bottom: 2px solid #e0e0e0;
+        margin-bottom: 25px;
+        padding-bottom: 0;
+    }
+    
+    .profile-tabs .nav-link {
+        color: #666;
+        border: none;
+        border-bottom: 3px solid transparent;
+        border-radius: 0;
+        padding: 12px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s;
+        background: transparent;
+    }
+    
+    .profile-tabs .nav-link:hover {
+        color: #1a73e8;
+        background: rgba(26, 115, 232, 0.05);
+    }
+    
+    .profile-tabs .nav-link.active {
+        color: #1a73e8;
+        border-bottom-color: #1a73e8;
+        background: transparent;
+    }
+    
+    .profile-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 25px;
+    }
+    
+    .profile-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .btn-edit {
+        background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .btn-edit:hover {
+        background: linear-gradient(135deg, #3275e4 0%, #1565d8 100%);
+        color: white;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .info-item {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 8px;
+        border-left: 4px solid #e0e0e0;
+    }
+    
+    .info-item.full-width {
+        grid-column: span 2;
+    }
+    
+    .info-item label {
+        display: block;
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .info-item .value {
+        font-size: 15px;
+        color: #1a1a2e;
+        font-weight: 500;
+    }
+    
+    .info-item .value.empty {
+        color: #999;
+        font-style: italic;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .section-title i {
+        color: #1a73e8;
+    }
+    
+    .list-item {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        border-left: 4px solid #1a73e8;
+    }
+    
+    .list-item h5 {
+        margin: 0 0 8px;
+        color: #1a1a2e;
+    }
+    
+    .list-item p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .list-item .badge {
+        font-size: 11px;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+    }
+    
+    .empty-state i {
+        font-size: 48px;
+        color: #ddd;
+        margin-bottom: 15px;
+    }
+    
+    .btn-add {
+        background: #f0f7ff;
+        color: #1a73e8;
+        border: 2px dashed #1a73e8;
+        padding: 15px;
+        border-radius: 10px;
+        width: 100%;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+    
+    .btn-add:hover {
+        background: #1a73e8;
+        color: white;
+        border-style: solid;
+    }
+    
+    /* Modal styles */
+    .modal-header {
+        background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%);
+        color: white;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+    
+    .modal-content {
+        border-radius: 12px;
+        border: none;
+    }
+    
+    @media (max-width: 768px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        .info-item.full-width {
+            grid-column: span 1;
+        }
+        .profile-tabs {
+            overflow-x: auto;
+            flex-wrap: nowrap;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block docente_content %}
-<div class="container-fluid">
-    <h2>Mi Perfil</h2>
-    
-    {% if form.errors %}
-    <div class="alert alert-danger">
-        <h5>Por favor corrige los siguientes errores:</h5>
-        <ul class="mb-0">
-        {% for field, errors in form.errors.items() %}
-            {% for error in errors %}
-                <li><strong>{{ form[field].label.text }}:</strong> {{ error }}</li>
-            {% endfor %}
-        {% endfor %}
-        </ul>
+<!-- Profile Header -->
+<div class="profile-header">
+    <div class="profile-avatar">
+        {{ docente.nombre_completo[0] if docente and docente.nombre_completo else 'D' }}
     </div>
-    {% endif %}
-    
-    <form method="POST" action="{{ url_for('docente.perfil') }}">
-        {{ form.hidden_tag() }}
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.cvu.label(class="form-label") }}
-                    {{ form.cvu(class="form-control") }}
-                    {% if form.cvu.errors %}
-                        <div class="text-danger small">{{ form.cvu.errors[0] }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.nombre_completo.label(class="form-label") }} <span class="text-danger">*</span>
-                    {{ form.nombre_completo(class="form-control" + (" is-invalid" if form.nombre_completo.errors else "")) }}
-                    {% if form.nombre_completo.errors %}
-                        <div class="invalid-feedback">{{ form.nombre_completo.errors[0] }}</div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.curp.label(class="form-label") }}
-                    {{ form.curp(class="form-control") }}
-                    {% if form.curp.errors %}
-                        <div class="text-danger small">{{ form.curp.errors[0] }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.rfc.label(class="form-label") }}
-                    {{ form.rfc(class="form-control") }}
-                    {% if form.rfc.errors %}
-                        <div class="text-danger small">{{ form.rfc.errors[0] }}</div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-4">
-                <div class="mb-3">
-                    {{ form.sexo.label(class="form-label") }}
-                    {{ form.sexo(class="form-select") }}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="mb-3">
-                    {{ form.fecha_nacimiento.label(class="form-label") }}
-                    {{ form.fecha_nacimiento(class="form-control", type="date") }}
-                    {% if form.fecha_nacimiento.errors %}
-                        <div class="text-danger small">{{ form.fecha_nacimiento.errors[0] }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="mb-3">
-                    {{ form.estado_civil.label(class="form-label") }}
-                    {{ form.estado_civil(class="form-select") }}
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.pais_nacimiento.label(class="form-label") }}
-                    {{ form.pais_nacimiento(class="form-control") }}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.nacionalidad.label(class="form-label") }}
-                    {{ form.nacionalidad(class="form-control") }}
-                </div>
-            </div>
-        </div>
-        
-        <div class="mb-3">
-            {{ form.domicilio.label(class="form-label") }}
-            {{ form.domicilio(class="form-control", rows="3") }}
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.correo_principal.label(class="form-label") }}
-                    {{ form.correo_principal(class="form-control") }}
-                    {% if form.correo_principal.errors %}
-                        <div class="text-danger small">{{ form.correo_principal.errors[0] }}</div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3">
-                    {{ form.orcid.label(class="form-label") }}
-                    {{ form.orcid(class="form-control", placeholder="Ej: 0000-0002-1234-5678") }}
-                </div>
-            </div>
-        </div>
-        
-        <div class="mb-3">
-            {{ form.researcher_id.label(class="form-label") }}
-            {{ form.researcher_id(class="form-control") }}
-        </div>
-        
-        <div class="mb-3">
-            {{ form.submit(class="btn btn-primary btn-lg") }}
-            <a href="{{ url_for('docente.dashboard') }}" class="btn btn-secondary">Cancelar</a>
-        </div>
-    </form>
+    <div class="profile-info">
+        <h2>{{ docente.nombre_completo if docente else 'Nuevo Docente' }}</h2>
+        <p>Administra tu información profesional</p>
+    </div>
 </div>
+
+<!-- Tabs Navigation -->
+<ul class="nav profile-tabs" id="profileTabs" role="tablist">
+    <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#datos-generales">Datos Generales</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#formacion">Formación Académica</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#empleos">Empleos</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#idiomas">Idiomas</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cursos">Cursos</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#proyectos">Proyectos</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#articulos">Artículos</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#libros">Libros</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#congresos">Congresos</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tesis">Tesis</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#desarrollos">Desarrollos</button>
+    </li>
+</ul>
+
+<!-- Tab Content -->
+<div class="tab-content">
+    <!-- Datos Generales -->
+    <div class="tab-pane fade show active" id="datos-generales">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-person-vcard"></i> Información Personal</h5>
+                <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#editDatosModal">
+                    <i class="bi bi-pencil"></i> Editar Datos Generales
+                </button>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Nombre Completo</label>
+                    <div class="value {% if not docente or not docente.nombre_completo %}empty{% endif %}">
+                        {{ docente.nombre_completo if docente and docente.nombre_completo else 'No especificado' }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>CVU</label>
+                    <div class="value {% if not docente or not docente.cvu %}empty{% endif %}">
+                        {{ docente.cvu if docente and docente.cvu else 'No especificado' }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>CURP</label>
+                    <div class="value {% if not docente or not docente.curp %}empty{% endif %}">
+                        {{ docente.curp if docente and docente.curp else 'No especificado' }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>RFC</label>
+                    <div class="value {% if not docente or not docente.rfc %}empty{% endif %}">
+                        {{ docente.rfc if docente and docente.rfc else 'No especificado' }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>Correo</label>
+                    <div class="value {% if not docente or not docente.correo_principal %}empty{% endif %}">
+                        {{ docente.correo_principal if docente and docente.correo_principal else current_user.email }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>ORCID</label>
+                    <div class="value {% if not docente or not docente.orcid %}empty{% endif %}">
+                        {{ docente.orcid if docente and docente.orcid else 'No especificado' }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>Sexo</label>
+                    <div class="value {% if not docente or not docente.sexo %}empty{% endif %}">
+                        {{ docente.sexo if docente and docente.sexo else 'No especificado' }}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>Estado Civil</label>
+                    <div class="value {% if not docente or not docente.estado_civil %}empty{% endif %}">
+                        {{ docente.estado_civil if docente and docente.estado_civil else 'No especificado' }}
+                    </div>
+                </div>
+                <div class="info-item full-width">
+                    <label>Domicilio</label>
+                    <div class="value {% if not docente or not docente.domicilio %}empty{% endif %}">
+                        {{ docente.domicilio if docente and docente.domicilio else 'No especificado' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Formación Académica -->
+    <div class="tab-pane fade" id="formacion">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-mortarboard"></i> Formación Académica</h5>
+                <a href="{{ url_for('docente.nueva_formacion') }}" class="btn btn-edit">
+                    <i class="bi bi-plus-lg"></i> Agregar
+                </a>
+            </div>
+            
+            {% if formaciones %}
+                {% for f in formaciones %}
+                <div class="list-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5>{{ f.grado_obtenido or f.nivel }}</h5>
+                            <p><strong>{{ f.institucion }}</strong> - {{ f.pais or '' }}</p>
+                            <p class="text-muted">
+                                {{ f.fecha_inicio.strftime('%Y') if f.fecha_inicio else '' }} - 
+                                {{ f.fecha_fin.strftime('%Y') if f.fecha_fin else 'En curso' }}
+                            </p>
+                            {% if f.titulo_trabajo %}
+                            <p class="mt-2"><em>"{{ f.titulo_trabajo }}"</em></p>
+                            {% endif %}
+                        </div>
+                        <div class="btn-group">
+                            <a href="{{ url_for('docente.editar_formacion', id=f.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_formacion', id=f.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-mortarboard"></i>
+                    <p>No hay formación académica registrada</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Empleos -->
+    <div class="tab-pane fade" id="empleos">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-briefcase"></i> Experiencia Laboral</h5>
+                <a href="{{ url_for('docente.nuevo_empleo') }}" class="btn btn-edit">
+                    <i class="bi bi-plus-lg"></i> Agregar
+                </a>
+            </div>
+            
+            {% if empleos %}
+                {% for e in empleos %}
+                <div class="list-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5>{{ e.puesto }} {% if e.actual %}<span class="badge bg-success">Actual</span>{% endif %}</h5>
+                            <p><strong>{{ e.institucion }}</strong></p>
+                            <p class="text-muted">
+                                {{ e.fecha_inicio.strftime('%Y') if e.fecha_inicio else '' }} - 
+                                {% if e.actual %}Presente{% else %}{{ e.fecha_fin.strftime('%Y') if e.fecha_fin else '' }}{% endif %}
+                            </p>
+                            {% if e.logros %}<p class="mt-2">{{ e.logros }}</p>{% endif %}
+                        </div>
+                        <div class="btn-group">
+                            <a href="{{ url_for('docente.editar_empleo', id=e.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_empleo', id=e.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-briefcase"></i>
+                    <p>No hay empleos registrados</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Idiomas -->
+    <div class="tab-pane fade" id="idiomas">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-translate"></i> Idiomas</h5>
+                <button class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#addIdiomaModal">
+                    <i class="bi bi-plus-lg"></i> Agregar
+                </button>
+            </div>
+            
+            {% if idiomas %}
+            <div class="mb-4">
+                <h6 class="text-muted mb-3">Mis Registros</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="background: #f8f9fa; font-weight: 600; color: #666; text-transform: uppercase; font-size: 12px;">Idioma</th>
+                                <th style="background: #f8f9fa; font-weight: 600; color: #666; text-transform: uppercase; font-size: 12px;">Nivel</th>
+                                <th style="background: #f8f9fa; font-weight: 600; color: #666; text-transform: uppercase; font-size: 12px;">Certificación</th>
+                                <th style="background: #f8f9fa; font-weight: 600; color: #666; text-transform: uppercase; font-size: 12px;" class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in idiomas %}
+                            <tr>
+                                <td><strong>{{ i.idioma }}</strong></td>
+                                <td>
+                                    {% if i.nivel == 'C1' %}Avanzado (C1)
+                                    {% elif i.nivel == 'C2' %}Maestría (C2)
+                                    {% elif i.nivel == 'B1' %}Intermedio (B1)
+                                    {% elif i.nivel == 'B2' %}Intermedio Alto (B2)
+                                    {% elif i.nivel == 'A1' %}Básico (A1)
+                                    {% elif i.nivel == 'A2' %}Elemental (A2)
+                                    {% elif i.nivel == 'Nativo' %}Nativo
+                                    {% else %}{{ i.nivel }}{% endif %}
+                                </td>
+                                <td>{{ i.certificacion or '-' }}</td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('docente.editar_idioma', id=i.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('docente.eliminar_idioma', id=i.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="bi bi-translate"></i>
+                <p>No tienes idiomas registrados</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Modal Agregar Idioma -->
+    <div class="modal fade" id="addIdiomaModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-translate"></i> Agregar Idioma</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" action="{{ url_for('docente.nuevo_idioma') }}">
+                    {{ idioma_form.hidden_tag() }}
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Idioma <span class="text-danger">*</span></label>
+                                {{ idioma_form.idioma(class="form-control", placeholder="Ej: Inglés") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nivel <span class="text-danger">*</span></label>
+                                {{ idioma_form.nivel(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Certificación</label>
+                            {{ idioma_form.certificacion(class="form-control", placeholder="Ej: TOEFL 620 puntos") }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cursos -->
+    <div class="tab-pane fade" id="cursos">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-book"></i> Cursos Impartidos</h5>
+                <a href="{{ url_for('docente.nuevo_curso') }}" class="btn btn-edit"><i class="bi bi-plus-lg"></i> Agregar</a>
+            </div>
+            {% if cursos %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead><tr>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Curso</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Programa</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Nivel</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;" class="text-end">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for c in cursos %}
+                    <tr>
+                        <td><strong>{{ c.nombre_curso }}</strong></td>
+                        <td>{{ c.programa_educativo or '-' }}</td>
+                        <td>{{ c.nivel or '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('docente.editar_curso', id=c.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_curso', id=c.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state"><i class="bi bi-book"></i><p>No hay cursos registrados</p></div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Proyectos -->
+    <div class="tab-pane fade" id="proyectos">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-kanban"></i> Proyectos de Investigación</h5>
+                <a href="{{ url_for('docente.nuevo_proyecto') }}" class="btn btn-edit"><i class="bi bi-plus-lg"></i> Agregar</a>
+            </div>
+            {% if proyectos %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead><tr>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Proyecto</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Estado</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Financiamiento</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;" class="text-end">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for p in proyectos %}
+                    <tr>
+                        <td><strong>{{ p.nombre_proyecto }}</strong></td>
+                        <td>{{ p.estado or '-' }}</td>
+                        <td>{{ p.financiamiento or '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('docente.editar_proyecto', id=p.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_proyecto', id=p.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state"><i class="bi bi-kanban"></i><p>No hay proyectos registrados</p></div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Artículos -->
+    <div class="tab-pane fade" id="articulos">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-journal-text"></i> Artículos Científicos</h5>
+                <a href="{{ url_for('docente.nuevo_articulo') }}" class="btn btn-edit">
+                    <i class="bi bi-plus-lg"></i> Agregar
+                </a>
+            </div>
+            
+            {% if articulos %}
+                {% for a in articulos %}
+                <div class="list-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5>{{ a.titulo }}</h5>
+                            <p><strong>{{ a.revista or 'Sin revista' }}</strong> {% if a.anio %}({{ a.anio }}){% endif %}</p>
+                            {% if a.doi %}<p class="small"><a href="https://doi.org/{{ a.doi }}" target="_blank">DOI: {{ a.doi }}</a></p>{% endif %}
+                            {% if a.producto_destacado %}<span class="badge bg-warning text-dark">Producto Destacado</span>{% endif %}
+                        </div>
+                        <div class="btn-group">
+                            <a href="{{ url_for('docente.editar_articulo', id=a.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_articulo', id=a.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-journal-text"></i>
+                    <p>No hay artículos registrados</p>
+                    <a href="{{ url_for('sync.index') }}" class="btn btn-outline-primary mt-2">
+                        <i class="bi bi-cloud-download"></i> Sincronizar desde ORCID
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Libros -->
+    <div class="tab-pane fade" id="libros">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-book-half"></i> Libros y Capítulos</h5>
+                <a href="{{ url_for('docente.nuevo_libro') }}" class="btn btn-edit"><i class="bi bi-plus-lg"></i> Agregar</a>
+            </div>
+            {% if libros %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead><tr>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Título</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Editorial</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Año</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;" class="text-end">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for l in libros %}
+                    <tr>
+                        <td><strong>{{ l.titulo }}</strong></td>
+                        <td>{{ l.editorial or '-' }}</td>
+                        <td>{{ l.anio or '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('docente.editar_libro', id=l.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_libro', id=l.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state"><i class="bi bi-book-half"></i><p>No hay libros registrados</p></div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Congresos -->
+    <div class="tab-pane fade" id="congresos">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-people"></i> Participación en Congresos</h5>
+                <a href="{{ url_for('docente.nuevo_congreso') }}" class="btn btn-edit"><i class="bi bi-plus-lg"></i> Agregar</a>
+            </div>
+            {% if congresos %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead><tr>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Congreso</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Ponencia</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Tipo</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;" class="text-end">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for c in congresos %}
+                    <tr>
+                        <td><strong>{{ c.nombre_congreso }}</strong></td>
+                        <td>{{ c.titulo_ponencia or '-' }}</td>
+                        <td>{{ c.tipo or '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('docente.editar_congreso', id=c.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_congreso', id=c.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state"><i class="bi bi-people"></i><p>No hay congresos registrados</p></div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Tesis -->
+    <div class="tab-pane fade" id="tesis">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-file-earmark-text"></i> Tesis Dirigidas</h5>
+                <a href="{{ url_for('docente.nueva_tesis') }}" class="btn btn-edit"><i class="bi bi-plus-lg"></i> Agregar</a>
+            </div>
+            {% if tesis %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead><tr>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Título</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Estudiante</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Nivel</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Estado</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;" class="text-end">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for t in tesis %}
+                    <tr>
+                        <td><strong>{{ t.titulo }}</strong></td>
+                        <td>{{ t.estudiante_nombre or '-' }}</td>
+                        <td>{{ t.nivel or '-' }}</td>
+                        <td>{{ t.estado or '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('docente.editar_tesis', id=t.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_tesis', id=t.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state"><i class="bi bi-file-earmark-text"></i><p>No hay tesis registradas</p></div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Desarrollos -->
+    <div class="tab-pane fade" id="desarrollos">
+        <div class="profile-card">
+            <div class="profile-card-header">
+                <h5 class="section-title"><i class="bi bi-gear"></i> Desarrollos Tecnológicos</h5>
+                <a href="{{ url_for('docente.nuevo_desarrollo') }}" class="btn btn-edit"><i class="bi bi-plus-lg"></i> Agregar</a>
+            </div>
+            {% if desarrollos %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead><tr>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Nombre</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Tipo</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;">Nivel TRL</th>
+                        <th style="background:#f8f9fa;font-weight:600;color:#666;text-transform:uppercase;font-size:12px;" class="text-end">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for d in desarrollos %}
+                    <tr>
+                        <td><strong>{{ d.nombre }}</strong></td>
+                        <td>{{ d.tipo or '-' }}</td>
+                        <td>{{ d.nivel_madurez or '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('docente.editar_desarrollo', id=d.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form method="POST" action="{{ url_for('docente.eliminar_desarrollo', id=d.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state"><i class="bi bi-gear"></i><p>No hay desarrollos registrados</p></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Datos Generales -->
+<div class="modal fade" id="editDatosModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-pencil"></i> Editar Datos Generales</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('docente.perfil') }}">
+                {{ form.hidden_tag() }}
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Nombre Completo <span class="text-danger">*</span></label>
+                            {{ form.nombre_completo(class="form-control", placeholder="Dr. Juan Carlos Martínez López") }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">CVU</label>
+                            {{ form.cvu(class="form-control", placeholder="123456") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">CURP</label>
+                            {{ form.curp(class="form-control", placeholder="MALJ800101HDFRPN09") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">RFC</label>
+                            {{ form.rfc(class="form-control", placeholder="MALJ800101ABC") }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Sexo</label>
+                            {{ form.sexo(class="form-select") }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha de Nacimiento</label>
+                            {{ form.fecha_nacimiento(class="form-control", type="date") }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Estado Civil</label>
+                            {{ form.estado_civil(class="form-select") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">País de Nacimiento</label>
+                            {{ form.pais_nacimiento(class="form-control", placeholder="México") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nacionalidad</label>
+                            {{ form.nacionalidad(class="form-control", placeholder="Mexicana") }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Domicilio</label>
+                            {{ form.domicilio(class="form-control", rows="2", placeholder="Calle, Número, Colonia, Ciudad, Estado, CP") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Correo Principal</label>
+                            {{ form.correo_principal(class="form-control", placeholder="correo@uttec.edu.mx") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">ORCID</label>
+                            {{ form.orcid(class="form-control", placeholder="0000-0002-1234-5678") }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Researcher ID</label>
+                            {{ form.researcher_id(class="form-control", placeholder="A-1234-5678") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i> Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Mostrar errores del formulario si existen
+{% if form.errors %}
+var editModal = new bootstrap.Modal(document.getElementById('editDatosModal'));
+editModal.show();
+{% endif %}
+</script>
 {% endblock %}

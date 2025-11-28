@@ -1,0 +1,27 @@
+{% extends "layouts/docente_layout.html" %}
+{% block page_title %}Nuevo Proyecto{% endblock %}
+{% block docente_title %}Nuevo Proyecto{% endblock %}
+{% block extra_css %}<style>.profile-card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 30px; } .form-label { font-weight: 500; } .form-control, .form-select { border-radius: 8px; padding: 12px 15px; } .btn-primary { background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%); border: none; padding: 12px 30px; border-radius: 8px; }</style>{% endblock %}
+{% block docente_content %}
+<h2 class="mb-4"><i class="bi bi-kanban text-primary"></i> Nuevo Proyecto de Investigación</h2>
+<div class="profile-card">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="row">
+            <div class="col-12 mb-3"><label class="form-label">Nombre del Proyecto *</label>{{ form.nombre_proyecto(class="form-control") }}</div>
+            <div class="col-12 mb-3"><label class="form-label">Objetivo General</label>{{ form.objetivo_general(class="form-control") }}</div>
+            <div class="col-12 mb-3"><label class="form-label">Descripción</label>{{ form.descripcion(class="form-control") }}</div>
+            <div class="col-md-6 mb-3"><label class="form-label">Línea de Investigación</label>{{ form.linea_investigacion(class="form-control") }}</div>
+            <div class="col-md-6 mb-3"><label class="form-label">Estado</label>{{ form.estado(class="form-select") }}</div>
+            <div class="col-md-3 mb-3"><label class="form-label">Fecha Inicio</label>{{ form.fecha_inicio(class="form-control", type="date") }}</div>
+            <div class="col-md-3 mb-3"><label class="form-label">Fecha Fin</label>{{ form.fecha_fin(class="form-control", type="date") }}</div>
+            <div class="col-md-3 mb-3"><label class="form-label">Financiamiento</label>{{ form.financiamiento(class="form-control") }}</div>
+            <div class="col-md-3 mb-3"><label class="form-label">Monto ($)</label>{{ form.monto(class="form-control") }}</div>
+            <div class="col-md-6 mb-3"><label class="form-label">Instituciones Colaboradoras</label>{{ form.instituciones_colaboradoras(class="form-control") }}</div>
+            <div class="col-md-6 mb-3"><label class="form-label">Productos Obtenidos</label>{{ form.productos_obtenidos(class="form-control") }}</div>
+        </div>
+        <hr class="my-4"><div class="d-flex justify-content-end gap-3"><a href="{{ url_for('docente.perfil') }}" class="btn btn-outline-secondary">Cancelar</a><button type="submit" class="btn btn-primary">Guardar</button></div>
+    </form>
+</div>
+{% endblock %}
+
